@@ -50,7 +50,7 @@ public class TransactionService {
         while (!transactions.isEmpty()) {
             Transaction transaction = transactions.poll();
             if (transaction.getTimestamp() >= cutoffTime) {
-                validTransactions.add(transaction); // Keep valid transaction
+                validTransactions.add(transaction);
             }
         }
 
@@ -61,58 +61,6 @@ public class TransactionService {
         // Update the transactions queue with valid transactions
         transactions.addAll(validTransactions);
     }
-
-
-
-//    private final ConcurrentLinkedQueue<Transaction> transactions = new ConcurrentLinkedQueue<>();
-//    private final TransactionStatistics statistics = new TransactionStatistics();
-//
-//    public void addTransaction(Transaction transaction) {
-//        long currentTime = System.currentTimeMillis();
-//
-//        // Check for future timestamp
-//        if (transaction.getTimestamp() > currentTime) {
-//            throw new IllegalArgumentException("Transaction timestamp is in the future.");
-//        }
-//
-//        // Check for older than 30 seconds
-//        if (currentTime - transaction.getTimestamp() > 30000) {
-//            return; // No action, transaction too old
-//        }
-//
-//        // Add transaction
-//        transactions.add(transaction);
-//        statistics.addTransaction(transaction);
-//
-//        // Clean up old transactions
-//        cropOutOldTransactions();
-//    }
-//
-//    public TransactionStatistics getStatistics() {
-//        cropOutOldTransactions();
-//        return statistics;
-//    }
-//
-//    public void clearTransactions() {
-//        transactions.clear();
-//        statistics.clear();
-//    }
-//
-//    private void cropOutOldTransactions() {
-//        long cutoffTime = System.currentTimeMillis() - 30000;
-//
-//        // Remove old transactions and recalculate statistics
-//        while (!transactions.isEmpty() && transactions.peek().getTimestamp() < cutoffTime) {
-//            transactions.poll(); // Remove the old transaction
-//            statistics.clear(); // Clear current statistics
-//
-//            // Recalculate statistics for remaining transactions
-//            for (Transaction transaction : transactions) {
-//                statistics.addTransaction(transaction);
-//            }
-//        }
-//    }
-
 
 }
 
