@@ -1,7 +1,6 @@
 package com.korede.transactionstatistics.controller;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.korede.transactionstatistics.model.Transaction;
 import com.korede.transactionstatistics.model.TransactionStatistics;
 import com.korede.transactionstatistics.service.TransactionService;
@@ -18,8 +17,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -39,7 +37,7 @@ class TransactionControllerTest {
     }
 
     @Test
-    void testAddTransaction_HappyPath() throws Exception {
+    void testAddTransaction() throws Exception {
         String json = "{\"amount\": \"12.34\", \"timestamp\": \"" + Instant.now().toString() + "\"}";
 
         mockMvc.perform(post("/transaction")
@@ -56,19 +54,9 @@ class TransactionControllerTest {
         mockMvc.perform(post("/transaction")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
-                .andExpect(status().isNoContent()); // Expect 204
+                .andExpect(status().isNoContent());
     }
 
-//    @Test
-//    void testAddTransaction_FutureTimestamp() throws Exception {
-//        long futureTimestamp = System.currentTimeMillis() + 10000; // 10 seconds in the future
-//        String json = "{\"amount\": \"12.34\", \"timestamp\": \"" + Instant.ofEpochMilli(futureTimestamp).toString() + "\"}";
-//
-//        mockMvc.perform(post("/transaction")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(json))
-//                .andExpect(status().isUnprocessableEntity()); // Expect 422
-//    }
 
     @Test
     void testGetStatistics() throws Exception {
@@ -84,5 +72,11 @@ class TransactionControllerTest {
                 .andExpect(jsonPath("$.max").value("12.34"))
                 .andExpect(jsonPath("$.min").value("12.34"))
                 .andExpect(jsonPath("$.count").value(1));
+    }
+    @Test
+    void testDeleteTransactions() throws Exception {
+        doNothing().when(transactionService).DeleteTransactions();
+        mockMvc.perform(delete("/transaction"))
+                .andExpect(status().isNoContent()); // Expect 204
     }
 }

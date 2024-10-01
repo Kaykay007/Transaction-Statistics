@@ -19,7 +19,7 @@ class TransactionServiceTest {
     }
 
     @Test
-    void testAddTransaction_HappyPath() {
+    void testAddTransaction() {
         Transaction transaction = new Transaction(new BigDecimal("12.34"), Instant.now().toEpochMilli());
         transactionService.addTransaction(transaction);
 
@@ -43,13 +43,13 @@ class TransactionServiceTest {
     }
 
     @Test
-    void testClearTransactions() {
+    void testDeleteTransactions() {
         Transaction transaction1 = new Transaction(new BigDecimal("12.34"), Instant.now().toEpochMilli());
         Transaction transaction2 = new Transaction(new BigDecimal("56.78"), Instant.now().toEpochMilli());
         transactionService.addTransaction(transaction1);
         transactionService.addTransaction(transaction2);
 
-        transactionService.clearTransactions();
+        transactionService.DeleteTransactions();
         TransactionStatistics statistics = transactionService.getStatistics();
         assertEquals(BigDecimal.ZERO.setScale(2), statistics.getSum());
         assertEquals(0, statistics.getCount());

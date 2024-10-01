@@ -1,7 +1,5 @@
 package com.korede.transactionstatistics.controller;
 
-
-
 import com.korede.transactionstatistics.dtos.TransactionRequest;
 import com.korede.transactionstatistics.model.Transaction;
 import com.korede.transactionstatistics.model.TransactionStatistics;
@@ -25,6 +23,7 @@ public class TransactionController {
     public TransactionController(TransactionService transactionService) {
         this.transactionService = transactionService;
     }
+
     @PostMapping
     public ResponseEntity<Void> addTransaction(@RequestBody @Valid TransactionRequest request) {
         BigDecimal amount = new BigDecimal(request.getAmount()).setScale(2, RoundingMode.HALF_UP);
@@ -34,10 +33,10 @@ public class TransactionController {
         // Check if the transaction is older than 30 seconds
             long currentTime = System.currentTimeMillis();
             if (currentTime - transaction.getTimestamp() > 30000) {
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); // 204
+                log.info("checking current time!!! {}", currentTime);
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
             }
         transactionService.addTransaction(transaction);
-
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -49,8 +48,8 @@ public class TransactionController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> clearTransactions() {
-        transactionService.clearTransactions();
+    public ResponseEntity<Void> DeleteTransactions() {
+        transactionService.DeleteTransactions();
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
